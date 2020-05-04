@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using WebMVC.Infrastructure;
-using WebMVC.Infrastucture;
+using WebMVC.Infrastructure;
 using WebMVC.Models;
 
 namespace WebMVC.Services

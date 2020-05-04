@@ -43,7 +43,7 @@ namespace ProductCatalogApi
                         Version = "V1",
                         Description = "Product Catalog Microservice",
                     });
-
+                    options.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
                 });
         }
 

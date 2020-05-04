@@ -19,9 +19,9 @@ namespace CartApi.Models
             _database = _redis.GetDatabase();
         }
 
-        public Task<bool> DeleteCartAsync(string id)
+        public async Task<bool> DeleteCartAsync(string id)
         {
-            throw new NotImplementedException();
+            return await _database.KeyDeleteAsync(id);
         }
 
         public async Task<Cart> GetCartAsync(string cartId)
@@ -37,12 +37,30 @@ namespace CartApi.Models
 
         public IEnumerable<string> GetUsers()
         {
-            throw new NotImplementedException();
+            var server = GetServer();
+            var data = server.Keys();
+            //return data == null ? null : data.Select(k => k.ToString());
+            return data?.Select(k => k.ToString());
         }
 
-        public Task<Cart> UpdateCartAsync(Cart basket)
+
+        private IServer GetServer()
         {
-            throw new NotImplementedException();
+            var endpoint = _redis.GetEndPoints();
+            return _redis.GetServer(endpoint.First());
+        }
+
+        public async Task<Cart> UpdateCartAsync(Cart basket)
+        {
+            var created = await _database.StringSetAsync(basket.BuyerId,
+                JsonConvert.SerializeObject(basket));
+
+            if (!created)
+            {
+                return null;
+            }
+
+            return await GetCartAsync(basket.BuyerId);
         }
     }
 }
